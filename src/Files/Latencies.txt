@@ -1,0 +1,4 @@
+ADD 2
+MUL 4
+LD 3
+ST 3
