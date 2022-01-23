@@ -1,4 +1,4 @@
-ADD 2
-MUL 4
-LD 3
-ST 3
+ADD.D 2
+MUL.D 4
+LD.D 3
+ST.D 3
