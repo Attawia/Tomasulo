@@ -85,4 +85,17 @@ public class RegisterFile {
             line = reader.readLine();
         }
     }
+
+    public String toString(){
+        String toReturn = "Register File: \n";
+        for(int i = 0 ; i<32 ; i++){
+            toReturn += "F" + i + ": ";
+            if(hasData[i])
+                toReturn += data[i] + "\n";
+            else
+                toReturn += "\"" + awaiting[i] + "\"" + "\n";
+        }
+        return toReturn;
+
+    }
 }

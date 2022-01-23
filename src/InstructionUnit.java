@@ -18,7 +18,11 @@ public class InstructionUnit {
         textFileProg = file;
         fp = new File("src/Files/"+file);
         filePathProg = fp.getAbsolutePath();
-
+        try {
+            createProgram();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Vector<Instruction> getProgram() {

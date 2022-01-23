@@ -11,5 +11,9 @@ public class tests {
         values.put("A3",4.32f);
         values.put("M1",5.23421f);
         CDB.writeMultiple(values);
+        RegisterFile registerFile = new RegisterFile();
+        registerFile.awaitOn(2,"A3");
+        System.out.println(CDB);
+        System.out.println(registerFile);
     }
 }
