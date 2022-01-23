@@ -12,6 +12,12 @@ public class CommonDataBus {
         data.put(tag,value);
     }
 
+
+    public void writeMultiple(HashMap<String ,Float> values){
+        data.putAll(values);
+    }
+
+
     public Float search(String tag){
         return data.get(tag);
     }

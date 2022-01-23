@@ -1,6 +1,15 @@
+import java.util.HashMap;
+
 public class tests {
 
     public static void main(String[] args) {
-        RegisterFile reg = new RegisterFile();
+        CommonDataBus CDB = new CommonDataBus();
+        CDB.write("A1",1.234f);
+        CDB.write("M2",3.424f);
+        HashMap<String, Float> values = new HashMap<String,Float>();
+        values.put("A2",1.2234f);
+        values.put("A3",4.32f);
+        values.put("M1",5.23421f);
+        CDB.writeMultiple(values);
     }
 }
