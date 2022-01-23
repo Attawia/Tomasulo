@@ -52,7 +52,7 @@ public class ReservationStation {
 		for(int i = 0;i<this.length;i++) { //looping on all reservations
 			Float value = 0.0f;
 			if(reservations[i] != null) {
-				if((reservations[i].getQj().equals("")) && (reservations[i].getQk().equals(""))) { // If ready to execute
+				if((reservations[i].getQj() == null) && (reservations[i].getQk() == null)) { // If ready to execute
 					reservations[i].decTime();
 					
 					if(reservations[i].getRemainingtime() == -1) { //time to execute
@@ -100,6 +100,7 @@ public class ReservationStation {
 				toBeRemovedIndex++;
 			}
 		}
+		
 		for(int i = 0;i < toBeRemoved.length;i++) { //remove all used keys in waiting values list
 			waitingValues.remove(toBeRemoved[i]);
 		}
