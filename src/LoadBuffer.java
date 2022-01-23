@@ -1,3 +1,4 @@
+
 import java.util.*;
 public class LoadBuffer {
 	private HashMap<String, Integer> buffer;
@@ -81,4 +82,5 @@ public class LoadBuffer {
 
 	
 	
+
 }
