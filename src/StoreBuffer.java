@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 public class StoreBuffer {
 	private HashMap<String, Integer> buffer;
@@ -6,7 +9,7 @@ public class StoreBuffer {
 	private HashMap<String, Integer> latencies;
 	private HashMap<String,Integer> cycles;
 	
-	public StoreBuffer(int latency) {
+	public StoreBuffer() {
 		buffer=new HashMap<String,Integer>();
 		values=new HashMap<String,Object>();
 		latencies= new HashMap<String,Integer>();
@@ -14,7 +17,11 @@ public class StoreBuffer {
 		this.latency=latency;
 		initializeBuffer();
 		initializeValues();
-		initializeLatencies();
+		try {
+			initializeLatency();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		initializeCycles();
 	}
 	
@@ -33,13 +40,23 @@ public class StoreBuffer {
 		values.put("S4", null);
 		values.put("S5", null);
 	}
-	
-	private void initializeLatencies() {
-		latencies.put("S1", latency);
-		latencies.put("S2", latency);
-		latencies.put("S3", latency);
-		latencies.put("S4", latency);
-		latencies.put("S5", latency);
+
+	private void initializeLatency() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader("src/Files/Latencies.txt"));
+		String line = reader.readLine();
+		while (line != null) {
+			String op = line.split(" ")[0];
+			if (op.equals("S.D")) {
+				int lat = Integer.parseInt(line.split(" ")[1]);
+				this.latency = lat;
+				for (int i = 1; i <= 5; i++) {
+					latencies.put("S"+i,lat);
+				}
+				System.out.println(lat);
+			}
+			line = reader.readLine();
+		}
+
 	}
 
 	private void initializeCycles() {
@@ -73,7 +90,7 @@ public class StoreBuffer {
 		return null;
 	}
 
-	public Object[] execute(){
+	public MemoryUnit execute(MemoryUnit memory){
 		Object[] returned=new Object[2];
 		int toExecute=0;
 		int cycle=-1;
@@ -98,9 +115,9 @@ public class StoreBuffer {
 			values.put("S"+toExecute, null);
 			cycles.put("S"+toExecute, null);
 			latencies.put("S"+toExecute, latency);
-			return returned;
+			memory.store((int)returned[0],(Float)returned[1]);
 		}
-		return null;
+		return memory;
 	}
 	
 	public void cycle(CommonDataBus CDB) {
@@ -121,5 +138,46 @@ public class StoreBuffer {
 			}
 		}
 	}
+
+	public String toString(){
+		String s= "Store Buffer:\n ";
+		for(int i=1;i<=5;i++){
+			s+= "[ S" +i + ", ";
+			s+= buffer.get("S"+i) + ", ";
+			s+= values.get("S"+i) + " ] ";
+			if(buffer.get("S"+i)!=null){
+				s+= "Time Remaining: " + latencies.get("S"+i) + "\n";
+			}
+			else{
+				s+= "Time Remaining: N/A \n";
+			}
+		}
+
+
+		return s;
+	}
+
+	public boolean isEmpty(){
+		boolean empty = true;
+		for(int i=1;i<=5;i++){
+			if(buffer.get("S"+i)!=null) empty = false;
+		}
+		return empty;
+	}
+
+	public static void main(String[] args) {
+		StoreBuffer s = new StoreBuffer();
+		s.add(500,"A1",1);
+		s.add(500,"B1",1);
+		s.add(500,"M1",1);
+		s.add(500,"S1",1);
+		s.add(500,"S3",1);
+		s.add(500,"D5",1);
+
+		System.out.println(s.toString());
+
+	}
+
+
 
 }
