@@ -106,6 +106,64 @@ public class ReservationStation {
 			waitingValues.remove(toBeRemoved[i]);
 		}
 	}
+	
+	public boolean isEmpty() {
+		for(int i = 0;i<this.length;i++) {
+			if(reservations[i] != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String toString() {
+		String result = "";
+		for(int i = 0;i < this.length;i++) {
+			Reservation r = reservations[i];
+			int tagNumber = i + 1;
+			String vj = "";
+			String vk = "";
+			String qj = "";
+			String qk = "";
+			
+			if(reservations[i] != null) {
+				
+				if(r.getVj() != null) {
+					vj = r.getVj().toString();
+				}
+				if(r.getVk() != null) {
+					vk = r.getVk().toString();
+				}
+				if(r.getQj() != null) {
+					qj = r.getQj().toString();
+				}
+				if(r.getQk() != null) {
+					qk = r.getQk().toString();
+				}
+				
+				result += r.getTag() + " ";
+				result += "| Busy: 1 ";
+				result += "| OP: " + r.getOp() + " ";
+				result += "| VJ: " + vj + " ";
+				result += "| VK: " + vk + " ";
+				result += "| QJ: " + qj + " ";
+				result += "| QK: " + qk;
+				result += "| Time Remaining: " + r.getRemainingtime() + "\n";
+			}
+			else {
+				result += this.type + tagNumber + " ";
+				result += "| Busy: 0 ";
+				result += "| OP: ";
+				result += "| VJ: ";
+				result += "| VK: ";
+				result += "| QJ: ";
+				result += "| QK: " + "\n";
+			}
+		}
+		
+		
+		return result;
+	}
 
 	public static void main(String[] args) {
 		
