@@ -3,7 +3,9 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Tomasulo {
- boolean running = true;
+    Scanner scanner =  new Scanner(System.in);
+
+    boolean running = true;
 
     public void resolveBus(){
         //registerFile.readBus(CDB);
@@ -14,17 +16,19 @@ public class Tomasulo {
     }
 
     public void print(){
-        //System.out.println(instructionQueue.getProgram() + "\n" +
-        //            registerFile.toString() + "\n" +
-        //             addStation.toString() + "\n" +
-        //              mulStation.toString() + "\n" +
-        //              storeBuffer.toString() + "\n" +
-        //              loadBuffer.toString()
+        //System.out.println(
+        // "Clock Number : " + cycleNo + "\n" +
+        // "Instruction Queue : "+instructionQueue.getProgram() + "\n" +
+        // "Register File : "+registerFile.toString() + "\n" +
+        //"Add/Sub Reservation Station : "+addStation.toString() + "\n" +
+        //"Mul/Div Reservation Station : "+mulStation.toString() + "\n" +
+        //"Store Buffer : "+storeBuffer.toString() + "\n" +
+        //"Load Buffer : "+loadBuffer.toString()
         //              );
 
     }
     public void programRunner(){
-        Scanner scanner =  new Scanner(System.in);
+
         while(running){
 
 
@@ -44,7 +48,7 @@ public class Tomasulo {
 
 
     public static void main(String[] args) throws IOException {
-       
+
 
 
 
