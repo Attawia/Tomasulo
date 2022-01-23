@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class CommonDataBus {
 
@@ -26,5 +27,12 @@ public class CommonDataBus {
         data.clear();
     }
 
+    public String toString(){
+        String toReturn =  "CDB Contents: \n";
+        for (Map.Entry<String, Float> set : data.entrySet()) {
+            toReturn +=  set.getKey() + " = " + set.getValue() + "\n";
+        }
+        return toReturn;
+    }
 
 }
