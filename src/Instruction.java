@@ -77,17 +77,17 @@ public class Instruction {
                 true:false;
 
         if(!mem)
-        return "Instruction{"+"\n" +
-                "Operation: " + this.operation + "\n" +
-                "Operand1 : " + this.firstOperand + "\n" +
-                "Operand2 : " + this.secondOperand + "\n" +
-                "Destination Register : " + this.destReg + "\n" +
-                "Latency : " + this.latency +"}";
+        return "Instruction{" +
+                " Operation: " + this.operation +
+                " Operand1 : " + this.firstOperand  +
+                " Operand2 : " + this.secondOperand  +
+                " Destination Register : " + this.destReg  +
+                " Latency : " + this.latency +"} \n";
 
-        return "Instruction{"+"\n" +
-                "Operation: " + this.operation + "\n" +
-                "Target Address : " + this.firstOperand + "\n" +
-                "Destination Register : " + this.destReg + "\n" +
-                "Latency : " + this.latency +"}";
+        return "Instruction{" +
+                " Operation: " + this.operation  +
+                " Target Address : " + this.firstOperand  +
+                " Destination Register : " + this.destReg  +
+                " Latency : " + this.latency +"} \n";
     }
 }

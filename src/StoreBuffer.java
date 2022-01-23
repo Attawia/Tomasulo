@@ -46,7 +46,7 @@ public class StoreBuffer {
 		String line = reader.readLine();
 		while (line != null) {
 			String op = line.split(" ")[0];
-			if (op.equals("ST")) {
+			if (op.equals("S.D")) {
 				int lat = Integer.parseInt(line.split(" ")[1]);
 				this.latency = lat;
 				for (int i = 1; i <= 5; i++) {
@@ -144,8 +144,15 @@ public class StoreBuffer {
 		for(int i=1;i<=5;i++){
 			s+= "[ S" +i + ", ";
 			s+= buffer.get("S"+i) + ", ";
-			s+= values.get("S"+i) + " ] \n";
+			s+= values.get("S"+i) + " ] ";
+			if(buffer.get("S"+i)!=null){
+				s+= "Time Remaining: " + latencies.get("S"+i) + "\n";
+			}
+			else{
+				s+= "Time Remaining: N/A \n";
+			}
 		}
+
 
 		return s;
 	}

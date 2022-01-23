@@ -14,6 +14,8 @@ public class CommonDataBus {
     }
 
 
+
+
     public void writeMultiple(HashMap<String ,Float> values){
         data.putAll(values);
     }

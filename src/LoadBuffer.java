@@ -32,7 +32,7 @@ public class LoadBuffer {
 		String line = reader.readLine();
 		while (line != null) {
 			String op = line.split(" ")[0];
-			if (op.equals("LD")) {
+			if (op.equals("L.D")) {
 				int lat = Integer.parseInt(line.split(" ")[1]);
 				this.latency = lat;
 				for (int i = 0; i < 5; i++) {
@@ -100,7 +100,13 @@ public class LoadBuffer {
 	public String toString(){
 		String s = "Load Buffer : \n";
 		for(int i=1;i<=5;i++){
-			s+= "[ L"+ i + ", " + buffer.get("L"+i) + "] \n";
+			s+= "[ L"+ i + ", " + buffer.get("L"+i) + "] ";
+			if(buffer.get("L"+i)!=null){
+				s+= "Time Remaining: " + latencies[i-1] + "\n";
+			}
+			else{
+				s+= "Time Remaining: N/A \n";
+			}
 		}
 		return s;
 	}

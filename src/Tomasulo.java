@@ -1,21 +1,15 @@
-import java.io.*;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class Tomasulo {
     private int cycleNo;
-    private CommonDataBus CDB;
-    private RegisterFile registerFile;
-    private MemoryUnit memoryUnit;
-    private LoadBuffer loadBuffer;
-    private StoreBuffer storeBuffer;
-    private ReservationStation addStation;
-    private ReservationStation mulStation;
-    private InstructionQ instructionQueue;
-    private InstructionUnit instructionUnit;
+    private final CommonDataBus CDB;
+    private final RegisterFile registerFile;
+    private final MemoryUnit memoryUnit;
+    private final LoadBuffer loadBuffer;
+    private final StoreBuffer storeBuffer;
+    private final ReservationStation addStation;
+    private final ReservationStation mulStation;
+    private final InstructionQ instructionQueue;
     Scanner scanner =  new Scanner(System.in);
     boolean running = true;
 
@@ -28,7 +22,7 @@ public class Tomasulo {
         storeBuffer = new StoreBuffer();
         addStation = new ReservationStation(3, "A");
         mulStation = new ReservationStation(2, "M");
-        instructionUnit = new InstructionUnit("Program");
+        InstructionUnit instructionUnit = new InstructionUnit("Program.txt");
         instructionQueue = new InstructionQ(instructionUnit.getProgram());
 
     }
@@ -37,32 +31,48 @@ public class Tomasulo {
         registerFile.readBus(CDB);
         addStation.resolveBus(CDB);
         mulStation.resolveBus(CDB);
-        storeBuffer.cycle(CDB);
-        loadBuffer.cycle();
+    }
+
+    public void printInit(){
+        System.out.println(
+                "At start : \n" +
+                        "Instruction Queue : \n "+instructionQueue.getProgram() + "\n" +
+                        registerFile.toString() + "\n" +
+                        "Memory Unit: \n" +memoryUnit.toString()  + "\n"      +
+                        "Add/Sub Reservation Station : \n"+addStation.toString() + "\n" +
+                        "Mul/Div Reservation Station : \n"+mulStation.toString() + "\n" +
+                        storeBuffer.toString() + "\n" +
+                        loadBuffer.toString()
+        );
+
     }
 
     public void print(){
         System.out.println(
          "Clock Number : " + cycleNo + "\n" +
-         "Instruction Queue : "+instructionQueue.getProgram() + "\n" +
+         "Instruction Queue : \n "+instructionQueue.getProgram() + "\n" +
          registerFile.toString() + "\n" +
-        "Add/Sub Reservation Station : "+addStation.toString() + "\n" +
-        "Mul/Div Reservation Station : "+mulStation.toString() + "\n" +
-        "Store Buffer : "+storeBuffer.toString() + "\n" +
-        "Load Buffer : "+loadBuffer.toString()
+         "Memory Unit: \n" +memoryUnit.toString()  + "\n"      +
+        "Add/Sub Reservation Station : \n"+addStation.toString() + "\n" +
+        "Mul/Div Reservation Station : \n"+mulStation.toString() + "\n" +
+        storeBuffer.toString() + "\n" +
+        loadBuffer.toString()
                       );
 
     }
     public void programRunner(){
-
+        printInit();
         while(running){
             execute();
-            issue();
             resolveBus();
+            issue();
             print();
-            running = (addStation.isEmpty()&& mulStation.isEmpty()&&
-                    storeBuffer.isEmpty()&& loadBuffer.isEmpty())   ?false :true ;
+            storeBuffer.cycle(CDB);
+            loadBuffer.cycle();
+            running = !addStation.isEmpty() || !mulStation.isEmpty() ||
+                    !storeBuffer.isEmpty() || !loadBuffer.isEmpty();
             CDB.flush();
+            cycleNo++;
             scanner.nextLine();
 
         }
@@ -93,70 +103,58 @@ public class Tomasulo {
 		String qj = null;
 		String qk = null;
 		
-		if(registerFile.hasValue(Integer.parseInt(i.getFirstOperand().substring(1, 2)))) {
-			vj = registerFile.getData(Integer.parseInt(i.getFirstOperand().substring(1, 2)));
+		if(registerFile.hasValue(Integer.parseInt(i.getFirstOperand().substring(1)))) {
+			vj = registerFile.getData(Integer.parseInt(i.getFirstOperand().substring(1)));
 		}
 		else {
-			qj = registerFile.getTag(Integer.parseInt(i.getFirstOperand().substring(1, 2)));
+			qj = registerFile.getTag(Integer.parseInt(i.getFirstOperand().substring(1)));
 		}
 		
-		if(registerFile.hasValue(Integer.parseInt(i.getSecondOperand().substring(1, 2)))) {
-			vk = registerFile.getData(Integer.parseInt(i.getSecondOperand().substring(1, 2)));
+		if(registerFile.hasValue(Integer.parseInt(i.getSecondOperand().substring(1)))) {
+			vk = registerFile.getData(Integer.parseInt(i.getSecondOperand().substring(1)));
 		}
 		else {
-			qk = registerFile.getTag(Integer.parseInt(i.getSecondOperand().substring(1, 2)));
+			qk = registerFile.getTag(Integer.parseInt(i.getSecondOperand().substring(1)));
 		}
 		
-		Reservation r = new Reservation(i.getLatency(), op, vj, vk, qj, qk, null);
-		return r;
+		return new Reservation(i.getLatency(), op, vj, vk, qj, qk, null);
+
 	}
 	
 
     public void issue() {
-        Instruction next = instructionQueue.getNext();
+        Instruction next;
+        try{
+            next = instructionQueue.getNext();
+        }catch(NoSuchElementException e ){
+            return;
+        }
+
         String operation = next.getOperation();
-        String station = "";
-        switch (operation) {
-            case "ADD.D":
-            case "SUB.D":
-                station = "A";
-                break;
-            case "MUL.D":
-            case "DIV.D":
-                station = "M";
-                break;
-            case "L.D":
-                station = "L";
-                break;
-            case "S.D":
-                station = "S";
-                break;
-        }
-        boolean hasPlace = false;
-        switch (station) {
-            case "A":
-                hasPlace = addStation.freeSpace();
-                break;
-            case "M":
-                hasPlace = mulStation.freeSpace();
-                break;
-            case "L":
-                hasPlace = loadBuffer.isAvailable();
-                break;
-            case "S":
-                hasPlace = storeBuffer.isAvailable();
-                break;
-        }
+        String station = switch (operation) {
+            case "ADD.D", "SUB.D" -> "A";
+            case "MUL.D", "DIV.D" -> "M";
+            case "L.D" -> "L";
+            case "S.D" -> "S";
+            default -> "";
+        };
+        boolean hasPlace = switch (station) {
+            case "A" -> addStation.freeSpace();
+            case "M" -> mulStation.freeSpace();
+            case "L" -> loadBuffer.isAvailable();
+            case "S" -> storeBuffer.isAvailable();
+            default -> false;
+        };
         if (!hasPlace)
             return;
         next = instructionQueue.getNextAndRemove();
         int regNo = Integer.parseInt(next.getDestReg().substring(1));
         String tag;
-        if (station == "A" || station == "M") {
+        if (station.equals("A") || station.equals("M")) {
             Reservation res = instructionToReservation(next);
-            tag = station == "A" ? addStation.addReservation(res) : mulStation.addReservation(res);
+            tag = station.equals("A") ? addStation.addReservation(res) : mulStation.addReservation(res);
             registerFile.awaitOn(regNo, tag);
-        } else if (station == "L") {
+        } else if (station.equals("L")) {
             tag = loadBuffer.add(Integer.parseInt(next.getFirstOperand()));
             registerFile.awaitOn(regNo, tag);
         } else {
@@ -168,6 +166,11 @@ public class Tomasulo {
         }
 
 
+    }
+
+    public static void main(String[] args) {
+        Tomasulo tom = new Tomasulo();
+        tom.programRunner();
     }
 
 

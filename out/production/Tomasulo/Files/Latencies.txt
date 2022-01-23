@@ -1,4 +1,6 @@
 ADD.D 2
+SUB.D 2
 MUL.D 4
-LD.D 3
-ST.D 3
+DIV.D 7
+L.D 3
+S.D 3
