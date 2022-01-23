@@ -34,15 +34,15 @@ public class MemoryUnit {
 	}
 	
 	public String toString() {
-		String s="[";
+		String s="";
 		for(int i=0;i<memory.length;i++) {
-			s+= i + ": " + memory[i] + ", ";
+			s+="[" +  i + ": " + memory[i] + "]\n";
 		}
 		s+= " ]";
 		return s;
 	}
 	public static void main(String[] args) {
 		MemoryUnit m = new MemoryUnit();
-		System.out.println(m.toString());
+		System.out.println(m.load(17));
 	}
 }

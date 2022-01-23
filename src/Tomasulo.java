@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 public class Tomasulo {
@@ -16,18 +18,30 @@ public class Tomasulo {
     private InstructionUnit instructionUnit;
 
 
+
     public Tomasulo() {
         cycleNo = 0;
         CDB = new CommonDataBus();
         registerFile = new RegisterFile();
         memoryUnit = new MemoryUnit();
-        loadBuffer = new LoadBuffer(1);
-        storeBuffer = new StoreBuffer(1);
+        loadBuffer = new LoadBuffer();
+        storeBuffer = new StoreBuffer();
         addStation = new ReservationStation(3, "A");
         mulStation = new ReservationStation(2, "M");
         instructionUnit = new InstructionUnit("Program");
         instructionQueue = new InstructionQ(instructionUnit.getProgram());
 
+    }
+
+
+    private void execute(){
+        HashMap<String,Float> h = addStation.check();
+        CDB.writeMultiple(h);
+        h= mulStation.check();
+        CDB.writeMultiple(h);
+        h= loadBuffer.execute(memoryUnit);
+        CDB.writeMultiple(h);
+        storeBuffer.execute(memoryUnit);
     }
 
 
