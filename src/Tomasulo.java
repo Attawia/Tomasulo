@@ -15,6 +15,7 @@ public class Tomasulo {
     private InstructionQ instructionQueue;
     private InstructionUnit instructionUnit;
 
+
     public Tomasulo() {
         cycleNo = 0;
         CDB = new CommonDataBus();
@@ -29,11 +30,33 @@ public class Tomasulo {
 
     }
 
-    public static Reservation instructionToReservation(Instruction next) {
-        return null;
-    }
 
-
+	public static Reservation instructionToReservation(Instruction i) {
+		String op = i.getOperation();
+		Float vj = null;
+		Float vk = null;
+		String qj = null;
+		String qk = null;
+		
+		if(registerFile.hasValue(Integer.parseInt(i.getFirstOperand().substring(1, 2)))) {
+			vj = registerFile.getData(Integer.parseInt(i.getFirstOperand().substring(1, 2)));
+		}
+		else {
+			qj = registerFile.getTag(Integer.parseInt(i.getFirstOperand().substring(1, 2)));
+		}
+		
+		if(registerFile.hasValue(Integer.parseInt(i.getSecondOperand().substring(1, 2)))) {
+			vk = registerFile.getData(Integer.parseInt(i.getSecondOperand().substring(1, 2)));
+		}
+		else {
+			qk = registerFile.getTag(Integer.parseInt(i.getSecondOperand().substring(1, 2)));
+		}
+		
+		Reservation r = new Reservation(i.getLatency(), op, vj, vk, qj, qk, null);
+		return r;
+	}
+	
+	
     public void issue() {
         Instruction next = instructionQueue.getInstruction();
         String operation = next.getOperation();
