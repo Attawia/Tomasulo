@@ -12,7 +12,7 @@ public class CommonDataBus {
         data.put(tag,value);
     }
 
-    public float search(String tag){
+    public Float search(String tag){
         return data.get(tag);
     }
 
