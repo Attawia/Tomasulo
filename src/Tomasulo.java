@@ -31,7 +31,7 @@ public class Tomasulo {
     }
 
 
-	public static Reservation instructionToReservation(Instruction i) {
+	public Reservation instructionToReservation(Instruction i) {
 		String op = i.getOperation();
 		Float vj = null;
 		Float vk = null;
@@ -56,7 +56,7 @@ public class Tomasulo {
 		return r;
 	}
 	
-	
+
     public void issue() {
         Instruction next = instructionQueue.getInstruction();
         String operation = next.getOperation();
