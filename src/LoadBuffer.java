@@ -46,24 +46,27 @@ public class LoadBuffer {
 		return null;
 	}
 	
-	public Integer execute() {
+	public HashMap<String,Float> execute(MemoryUnit memory) {
+		HashMap<String,Float> returned = new HashMap<String,Float>();
 		int address=-1;
 		for(int i=0;i<5;i++) {
 			if(latencies[i]==-1) {
 				address=buffer.get("L"+(i+1));
 				buffer.put("L"+(i+1), null);
 				latencies[i]=latency;
+				Float data = memory.load(address);
+				returned.put("L"+(i+1),data);
 				break;
 			}
 		}
-		if(address==-1)return null;
-		return address;
+		return returned;
 	}
 	public void cycle() {
 		for(int i=0;i<5;i++) {
 			if(buffer.get("L"+(i+1))!=null) latencies[i]--;
 		}
 	}
+
 	public int[]busy(){
 		int[] busy=new int[5];
 		for(int i=1;i<=5;i++) {
@@ -71,26 +74,12 @@ public class LoadBuffer {
 				busy[i-1]=0;
 			}
 			else {
-				busy[i-1]=5;
+				busy[i-1]=1;
 			}
 		}
 		return busy;
 	}
-	public static void main(String[] args) {
-		LoadBuffer b= new LoadBuffer(2);
-		if(b.isAvailable()) {
-			System.out.println(b.add(500));
-		}
-		b.cycle();
-		b.add(400);
-		b.cycle();
-		System.out.println(b.execute());
-		b.cycle();
-		System.out.println(b.execute());
-		System.out.println(b.execute());
 
-
-	}
 	
 	
 

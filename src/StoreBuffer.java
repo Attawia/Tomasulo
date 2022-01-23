@@ -73,7 +73,7 @@ public class StoreBuffer {
 		return null;
 	}
 
-	public Object[] execute(){
+	public MemoryUnit execute(MemoryUnit memory){
 		Object[] returned=new Object[2];
 		int toExecute=0;
 		int cycle=-1;
@@ -98,9 +98,9 @@ public class StoreBuffer {
 			values.put("S"+toExecute, null);
 			cycles.put("S"+toExecute, null);
 			latencies.put("S"+toExecute, latency);
-			return returned;
+			memory.store((int)returned[0],(Float)returned[1]);
 		}
-		return null;
+		return memory;
 	}
 	
 	public void cycle(CommonDataBus CDB) {
@@ -121,5 +121,7 @@ public class StoreBuffer {
 			}
 		}
 	}
+
+
 
 }
