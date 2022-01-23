@@ -150,6 +150,14 @@ public class StoreBuffer {
 		return s;
 	}
 
+	public boolean isEmpty(){
+		boolean empty = true;
+		for(int i=1;i<=5;i++){
+			if(buffer.get("S"+i)!=null) empty = false;
+		}
+		return empty;
+	}
+
 	public static void main(String[] args) {
 		StoreBuffer s = new StoreBuffer();
 		s.add(500,"A1",1);

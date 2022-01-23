@@ -105,6 +105,14 @@ public class LoadBuffer {
 		return s;
 	}
 
+	public boolean isEmpty(){
+		boolean empty = true;
+		for(int i=1;i<=5;i++){
+			if(buffer.get("L"+i)!=null) empty = false;
+		}
+		return empty;
+	}
+
 	public static void main(String[] args) {
 		LoadBuffer b = new LoadBuffer();
 		MemoryUnit m = new MemoryUnit();
