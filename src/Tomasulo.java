@@ -16,8 +16,8 @@ public class Tomasulo {
     private ReservationStation mulStation;
     private InstructionQ instructionQueue;
     private InstructionUnit instructionUnit;
-
-
+    Scanner scanner =  new Scanner(System.in);
+    boolean running = true;
 
     public Tomasulo() {
         cycleNo = 0;
@@ -32,6 +32,47 @@ public class Tomasulo {
         instructionQueue = new InstructionQ(instructionUnit.getProgram());
 
     }
+
+    public void resolveBus(){
+        registerFile.readBus(CDB);
+        addStation.resolveBus(CDB);
+        mulStation.resolveBus(CDB);
+        storeBuffer.cycle(CDB);
+        loadBuffer.cycle();
+    }
+
+    public void print(){
+        System.out.println(
+         "Clock Number : " + cycleNo + "\n" +
+         "Instruction Queue : "+instructionQueue.getProgram() + "\n" +
+         registerFile.toString() + "\n" +
+        "Add/Sub Reservation Station : "+addStation.toString() + "\n" +
+        "Mul/Div Reservation Station : "+mulStation.toString() + "\n" +
+        "Store Buffer : "+storeBuffer.toString() + "\n" +
+        "Load Buffer : "+loadBuffer.toString()
+                      );
+
+    }
+    public void programRunner(){
+
+        while(running){
+            execute();
+            issue();
+            resolveBus();
+            print();
+            running = (addStation.isEmpty()&& mulStation.isEmpty()&&
+                    storeBuffer.isEmpty()&& loadBuffer.isEmpty())   ?false :true ;
+            CDB.flush();
+            scanner.nextLine();
+
+        }
+    }
+
+
+
+
+
+
 
 
     private void execute(){
@@ -72,7 +113,7 @@ public class Tomasulo {
 	
 
     public void issue() {
-        Instruction next = instructionQueue.getInstruction();
+        Instruction next = instructionQueue.getNext();
         String operation = next.getOperation();
         String station = "";
         switch (operation) {
@@ -108,7 +149,7 @@ public class Tomasulo {
         }
         if (!hasPlace)
             return;
-        next = instructionQueue.getInstructionAndRemove();
+        next = instructionQueue.getNextAndRemove();
         int regNo = Integer.parseInt(next.getDestReg().substring(1));
         String tag;
         if (station == "A" || station == "M") {

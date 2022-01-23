@@ -73,9 +73,20 @@ public class Instruction {
 
     @Override
     public String toString() {
+        boolean mem = (this.operation.equals("LD.D") || this.operation.equals("ST.D"))?
+                true:false;
+
+        if(!mem)
         return "Instruction{"+"\n" +
+                "Operation: " + this.operation + "\n" +
                 "Operand1 : " + this.firstOperand + "\n" +
                 "Operand2 : " + this.secondOperand + "\n" +
+                "Destination Register : " + this.destReg + "\n" +
+                "Latency : " + this.latency +"}";
+
+        return "Instruction{"+"\n" +
+                "Operation: " + this.operation + "\n" +
+                "Target Address : " + this.firstOperand + "\n" +
                 "Destination Register : " + this.destReg + "\n" +
                 "Latency : " + this.latency +"}";
     }
