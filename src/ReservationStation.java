@@ -58,10 +58,10 @@ public class ReservationStation {
 					
 					if(reservations[i].getRemainingtime() == -1) { //time to execute
 						switch(reservations[i].getOp()) { //which operation
-						case "ADD.D" : value = reservations[i].getVj() + reservations[i].getVk();
-						case "SUB.D" : value = reservations[i].getVj() - reservations[i].getVk();
-						case "MUL.D" : value = reservations[i].getVj() * reservations[i].getVk();
-						case "DIV.D" : value = reservations[i].getVj() / reservations[i].getVk();
+						case "ADD.D" : value = reservations[i].getVj() + reservations[i].getVk();break;
+						case "SUB.D" : value = reservations[i].getVj() - reservations[i].getVk();break;
+						case "MUL.D" : value = reservations[i].getVj() * reservations[i].getVk();break;
+						case "DIV.D" : value = reservations[i].getVj() / reservations[i].getVk();break;
 						}
 						
 						//put the result of the execution to be written on the bus

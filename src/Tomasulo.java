@@ -81,10 +81,6 @@ public class Tomasulo {
 
 
 
-
-
-
-
     private void execute(){
         HashMap<String,Float> h = addStation.check();
         CDB.writeMultiple(h);
