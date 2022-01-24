@@ -31,6 +31,7 @@ public class Tomasulo {
         registerFile.readBus(CDB);
         addStation.resolveBus(CDB);
         mulStation.resolveBus(CDB);
+        storeBuffer.updateValues(CDB);
     }
 
     public void printInit(){
@@ -67,8 +68,8 @@ public class Tomasulo {
             resolveBus();
             issue();
             print();
-            storeBuffer.cycle(CDB);
             loadBuffer.cycle();
+            storeBuffer.cycle();
             running = !addStation.isEmpty() || !mulStation.isEmpty() ||
                     !storeBuffer.isEmpty() || !loadBuffer.isEmpty();
             CDB.flush();
