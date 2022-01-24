@@ -43,6 +43,8 @@ public class InstructionUnit {
 
         while ((lineP = br.readLine()) != null){
             String[] instructionAsText = lineP.split(" ");
+            if(instructionAsText.length == 1)
+                break;
             op = instructionAsText[0];
             dest = instructionAsText[1];
             op1 = instructionAsText[2];
