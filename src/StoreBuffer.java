@@ -120,15 +120,15 @@ public class StoreBuffer {
 		return memory;
 	}
 	
-	public void cycle(CommonDataBus CDB) {
+	public void cycle() {
 		for(int i=1;i<=5;i++) {
-			if(buffer.get("S"+i)!=null) {
+			if(buffer.get("S"+i)!=null && values.get("S"+i) instanceof Float) {
 				latencies.put("S"+i,latencies.get("S"+i)-1);
 			}
 		}
-		updateValues(CDB);
+
 	}
-	
+
 	public void updateValues(CommonDataBus CDB) {
 		for(int i=1;i<=5;i++) {
 			if(buffer.get("S"+i)!=null && values.get("S"+i) instanceof String) {
@@ -140,7 +140,7 @@ public class StoreBuffer {
 	}
 
 	public String toString(){
-		String s= "Store Buffer:\n ";
+		String s= "Store Buffer:\n";
 		for(int i=1;i<=5;i++){
 			s+= "[ S" +i + ", ";
 			s+= buffer.get("S"+i) + ", ";
