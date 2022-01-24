@@ -2,7 +2,6 @@
 public class Reservation {
 	
 	private int remainingtime;
-	private boolean busy;
 	private String tag;
 	private String op;
 	private Float vj;
@@ -34,14 +33,6 @@ public class Reservation {
 
 	public int getRemainingtime() {
 		return remainingtime;
-	}
-
-	public boolean isBusy() {
-		return busy;
-	}
-
-	public void setBusy(boolean busy) {
-		this.busy = busy;
 	}
 
 	public String getTag() {

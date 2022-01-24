@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class CommonDataBus {
 
@@ -11,6 +12,8 @@ public class CommonDataBus {
     public void write(String tag,Float value){
         data.put(tag,value);
     }
+
+
 
 
     public void writeMultiple(HashMap<String ,Float> values){
@@ -26,5 +29,12 @@ public class CommonDataBus {
         data.clear();
     }
 
+    public String toString(){
+        String toReturn =  "CDB Contents: \n";
+        for (Map.Entry<String, Float> set : data.entrySet()) {
+            toReturn +=  set.getKey() + " = " + set.getValue() + "\n";
+        }
+        return toReturn;
+    }
 
 }

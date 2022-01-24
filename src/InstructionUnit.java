@@ -12,12 +12,17 @@ public class InstructionUnit {
     private Vector<Instruction> program;
 
 
-    public InstructionUnit(String file){
+    public InstructionUnit(String file) {
         program = new Vector<Instruction>();
 
         textFileProg = file;
         fp = new File("src/Files/"+file);
         filePathProg = fp.getAbsolutePath();
+        try {
+            this.createProgram();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -41,7 +46,8 @@ public class InstructionUnit {
             op = instructionAsText[0];
             dest = instructionAsText[1];
             op1 = instructionAsText[2];
-            op2 = instructionAsText[3];
+            if(!(op.equals("L.D") || op.equals("S.D"))) op2 = instructionAsText[3];
+            else op2 = "";
 
             program.add(new Instruction(op, dest, op1 ,op2));
 

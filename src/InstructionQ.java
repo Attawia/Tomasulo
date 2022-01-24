@@ -7,11 +7,16 @@ public class InstructionQ {
         program = p;
     }
 
-    public Instruction getInstructionAndRemove(){
+    public Instruction getNextAndRemove(){
+
         return program.remove(0);
     }
 
-public Instruction getInstruction(){
+public Instruction getNext(){
         return program.firstElement();
 }
+
+    public Vector<Instruction> getProgram() {
+        return program;
+    }
 }
